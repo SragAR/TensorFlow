@@ -15,9 +15,11 @@ y_ = tf.placeholder(tf.float32, [None, 10])
 error = tf.square(y - y_)
 loss = tf.reduce_sum(error)
 
+cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
+
 tf.global_variables_initializer().run()
-optimizer = tf.train.GradientDescentOptimizer(0.01)
-train = optimizer.minimize(loss)
+optimizer = tf.train.GradientDescentOptimizer(0.05)
+train = optimizer.minimize(cross_entropy)
 images, labels = mnist.train.next_batch(100)
 
 correct_prediction =  tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
@@ -26,7 +28,7 @@ print"Old accuracy"
 #print(sess.run([W, b]))
 print sess.run(accuracy, {x: images, y_: labels})
 tf.global_variables_initializer().run()                                  
-for _ in range(21):
+for _ in range(1000):
     sess.run(train,{x:images, y_:labels})   
 
 print"New accuracy"
