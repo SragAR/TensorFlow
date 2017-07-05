@@ -15,10 +15,15 @@ loss = tf.reduce_sum(squared_deltas)
 init = tf.global_variables_initializer()
 sess.run(init)
 
-#assigning value to variable 
-fixW = tf.assign(W,[-1])
-fixb = tf.assign(b, [1])
-sess.run([fixW, fixb])
+#optimizer
+optimizer = tf.train.GradientDescentOptimizer(0.01)
+train = optimizer.minimize(loss)
+sess.run(init)
+old_W, old_b, old_loss = sess.run([W, b, loss], {x:[1,2,3], y:[0, -1, -2]})
+print("old W: %s \told b: %s\told loss : %s"%(old_W, old_b, old_loss))
 
-print(sess.run(linear_model, {x:[1,2,3], y:[4, 7, 10]}))
-print sess.run(loss,{x:[1,2,3], y:[0, -1, -2]})
+for i in range(1000):
+    sess.run(train,{x:[1,2,3], y:[0, -1, -2]})
+
+curr_W, curr_b, curr_loss = sess.run([W, b, loss], {x:[1,2,3], y:[0, -1, -2]})
+print("new W: %s \tnew b: %s\tnew loss : %s"%(curr_W, curr_b, curr_loss))
