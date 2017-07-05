@@ -1,3 +1,5 @@
+#Linear regression program 
+
 import tensorflow as tf
 sess = tf.Session()
 
