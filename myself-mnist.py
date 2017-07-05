@@ -1,5 +1,5 @@
 #before training, accuracy 0.07
-#After training, accuracy 0.13
+#After training, accuracy 1
 
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
