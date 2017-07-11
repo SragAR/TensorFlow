@@ -2,7 +2,7 @@
 #After training, accuracy 1
 
 from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True, validation_size=0)
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True, validation_size=2)
 
 import tensorflow as tf
 sess = tf.InteractiveSession()
@@ -10,7 +10,7 @@ sess = tf.InteractiveSession()
 def correcting_function(row):
   condition = tf.logical_and(
       tf.equal(row[0], tf.reduce_max(row)),
-      tf.less(row[0], 4))
+      tf.less(row[0], 840))
 
   def swap_first_two(x):
     swapped_first_two = tf.stack([x[1], x[0]])
@@ -22,9 +22,9 @@ def correcting_function(row):
   return maybe_swapped
 
 
-W = tf.Variable(tf.zeros([784,10]))
+W = tf.Variable(tf.zeros([64516,10]))
 b = tf.Variable(tf.zeros([10]))
-x = tf.placeholder(tf.float32, [None, 784])
+x = tf.placeholder(tf.float32, [None, 64516])
 actual_output = tf.matmul(x, W) + b
 y = tf.map_fn(correcting_function, actual_output)
 y_ = tf.placeholder(tf.float32, [None, 10])
@@ -42,4 +42,4 @@ for _ in range(1000):
     sess.run(train,{x:images, y_:labels})   
 
 images, labels = mnist.test.next_batch(100)
-print "New accuracy", sess.run([W,b,accuracy, correct_prediction], {x: images, y_: labels})
+print "New accuracy", sess.run([accuracy, y, y_], {x: images, y_: labels})
