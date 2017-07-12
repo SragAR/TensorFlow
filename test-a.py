@@ -1,12 +1,20 @@
 
-
-from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True, validation_size=0)
-
 import tensorflow as tf
-sess = tf.InteractiveSession()
+sess = tf.Session()
+#name for variables very important
+W = tf.Variable([3], dtype=tf.float32,name="W")
+b = tf.Variable([-3],dtype=tf.float32,name="b")
+saver = tf.train.Saver()
+#Initialization not required before loading saved variables
+#Here it is done to give defaukt value in case of error
+init = tf.global_variables_initializer()
+sess.run(init)
+#loading stored variables 
+try:
+    saver.restore(sess, "/tmp/model500.ckpt")
+    print("Model restored.")
+except Exception as e:
+    pass
 
-y = tf.placeholder(tf.float32, [None, 10])
 
-images, labels = mnist.train.next_batch(100)
-print sess.run(y, {y: labels})
+print(sess.run([W, b ]))
