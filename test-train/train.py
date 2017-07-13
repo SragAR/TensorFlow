@@ -1,5 +1,5 @@
 from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("../MNIST_data/", one_hot=True, validation_size=1)
+mnist = input_data.read_data_sets("../MNIST_data/", one_hot=True, validation_size=2)
 
 import tensorflow as tf
 
@@ -12,13 +12,13 @@ y_ = tf.placeholder(tf.float32, [None, 10])
 sess = tf.InteractiveSession()
 saver = tf.train.Saver()
 cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
-optimizer = tf.train.GradientDescentOptimizer(0.01)
+optimizer = tf.train.GradientDescentOptimizer(0.02)
 train = optimizer.minimize(cross_entropy)
 
 tf.global_variables_initializer().run()
 
 for _ in range(1000):
-    images, labels = mnist.train.next_batch(1)
+    images, labels = mnist.train.next_batch(100)
     sess.run(train,{x:images, y_:labels})   
 
 save_path = saver.save(sess, "/tmp/trained-model.ckpt")
